@@ -80,7 +80,8 @@ const [reportsLoaded, setReportsLoaded] = useState(false);
 const [studentRegistrationForm, setStudentRegistrationForm] = useState({
   phoneNumber: "",
   college: "",
-  department: ""
+  department: "",
+  externalFormSubmitted: false
 });
 
 
@@ -856,13 +857,16 @@ async function registerForEvent(eventId) {
   if (registrationLoadingId) return;
 
   if (
-    !studentRegistrationForm.phoneNumber.trim() ||
-    !studentRegistrationForm.college.trim() ||
-    !studentRegistrationForm.department.trim()
-  ) {
-    setRegistrationError("Please complete all student registration fields.");
-    return;
-  }
+  !studentRegistrationForm.phoneNumber.trim() ||
+  !studentRegistrationForm.college.trim() ||
+  !studentRegistrationForm.department.trim() ||
+  studentRegistrationForm.externalFormSubmitted !== true
+) {
+  setRegistrationError(
+    "Please complete all fields and confirm that you submitted the external Google Form."
+  );
+  return;
+}
 
   setRegistrationLoadingId(eventId);
   setRegistrationMessage("");
@@ -1604,6 +1608,24 @@ useEffect(() => {
         maxLength={100}
         required
       />
+
+      <div className="external-form-confirmation">
+  <label htmlFor={`external-form-${event.event_id}`}>
+    <input
+      id={`external-form-${event.event_id}`}
+      type="checkbox"
+      checked={studentRegistrationForm.externalFormSubmitted}
+      onChange={(e) =>
+        setStudentRegistrationForm({
+          ...studentRegistrationForm,
+          externalFormSubmitted: e.target.checked
+        })
+      }
+      required
+    />
+    I confirm that I have submitted the external Google Form.
+  </label>
+</div>
 
       <button
         type="submit"
