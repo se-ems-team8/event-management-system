@@ -21,7 +21,14 @@ const registrationRequestSchema = z.object({
     .string()
     .trim()
     .min(2, "Department must contain at least 2 characters.")
-    .max(100, "Department cannot exceed 100 characters.")
+    .max(100, "Department cannot exceed 100 characters."),
+
+  externalFormSubmitted: z
+    .boolean()
+    .refine(
+      value => value === true,
+      "Please confirm that you have submitted the external Google Form."
+    )
 }).strict();
 
 function validateRegistrationRequest(input) {

@@ -790,3 +790,267 @@ button.register-button:disabled {
   margin-right: 0;
 }
 
+
+/* =========================================
+   EMS-NF-005: RESPONSIVE USABILITY
+   ========================================= */
+
+/* Consistent sizing across the application */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.page {
+  width: 100%;
+  min-width: 0;
+  padding: 32px 20px;
+}
+
+/* Wider layout for the signed-in dashboard */
+.register-card:has(.dashboard-section) {
+  width: 100%;
+  max-width: 1180px;
+  min-width: 0;
+  padding: 32px;
+}
+
+/* Dashboard sections */
+.dashboard-section {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  width: 100%;
+  min-width: 0;
+}
+
+.dashboard-section > h2 {
+  margin-bottom: 0;
+}
+
+.dashboard-panel {
+  width: 100%;
+  min-width: 0;
+  padding: 22px;
+  border: 1px solid #29314a;
+  border-radius: 12px;
+  background: #10182b;
+  overflow-wrap: anywhere;
+}
+
+.dashboard-panel h3 {
+  margin-top: 0;
+}
+
+.dashboard-panel input,
+.dashboard-panel select,
+.dashboard-panel textarea {
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* Forms and controls */
+.register-card form {
+  width: 100%;
+  min-width: 0;
+}
+
+.register-card input,
+.register-card select,
+.register-card textarea {
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.register-card button,
+.dashboard-panel button {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+/* Event cards */
+.event-result,
+.event-detail,
+.event-section,
+.event-card {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.event-result img,
+.event-detail img,
+.event-media img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Action buttons should wrap instead of overflowing */
+.event-actions,
+.event-actions button,
+.event-result > button {
+  flex-wrap: wrap;
+}
+
+/* Tables remain accessible on narrow screens */
+.attendee-table-wrap,
+.report-table-wrap {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.attendee-table,
+.report-table {
+  min-width: 600px;
+}
+
+/* Medium screens: tablets and small laptops */
+@media (max-width: 768px) {
+  .page {
+    padding: 20px 12px;
+    place-items: start center;
+  }
+
+  .register-card:has(.dashboard-section) {
+    max-width: 100%;
+    padding: 24px 18px;
+  }
+
+  .dashboard-panel {
+    padding: 18px;
+  }
+
+  .event-grid,
+  .event-search-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-panel.report-panel .report-filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dashboard-panel.report-panel .report-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .notification-item,
+  .attendee-list-heading {
+    flex-wrap: wrap;
+  }
+}
+
+/* Small screens: mobile phones */
+@media (max-width: 480px) {
+  .page {
+    padding: 12px 8px;
+  }
+
+  .register-card,
+  .register-card:has(.dashboard-section) {
+    width: 100%;
+    max-width: 100%;
+    padding: 20px 14px;
+    border-radius: 12px;
+  }
+
+  .brand {
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .register-card h1 {
+    font-size: 25px;
+  }
+
+  .dashboard-section {
+    gap: 16px;
+  }
+
+  .dashboard-panel {
+    padding: 14px 12px;
+  }
+
+  .event-section {
+    margin-top: 22px;
+    padding-top: 20px;
+  }
+
+  .event-grid,
+  .event-search-filters,
+  .dashboard-panel.report-panel .report-filters,
+  .dashboard-panel.report-panel .report-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .event-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .event-actions button,
+  .event-search-filters button,
+  .dashboard-panel.report-panel .report-filters button {
+    width: 100%;
+    margin: 4px 0;
+  }
+
+  .notification-item {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .ticket-qr {
+    width: 100%;
+    max-width: 220px;
+  }
+
+  .register-card input,
+  .register-card select,
+  .register-card textarea {
+    width: 100%;
+  }
+}
+
+.external-form-confirmation {
+  width: 100%;
+  margin: 20px 0;
+}
+
+.external-form-confirmation label {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 10px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.external-form-confirmation input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.notification-item {
+  background-color: #151e33;
+  color: #f8fafc;
+  border: 1px solid #293650;
+}
+
+.notification-item h3,
+.notification-item p,
+.notification-item span,
+.notification-item strong {
+  color: #f8fafc;
+}
+
+.notification-item time {
+  color: #94a3b8;
+}
