@@ -37,7 +37,7 @@ test("event creation requires authentication", async () => {
 
 test("attendees cannot create events", async () => {
   const token = jwt.sign(
-    { sub: "user-id", roles: ["ATTENDEE"] },
+    { sub: "00000000-0000-4000-8000-000000000004", roles: ["ATTENDEE"] },
     process.env.JWT_SECRET
   );
 
@@ -55,7 +55,7 @@ test("attendees cannot create events", async () => {
 
 test("authorized event creators receive validation errors before persistence", async () => {
   const token = jwt.sign(
-    { sub: "user-id", roles: ["ORGANIZER"] },
+    { sub: "00000000-0000-4000-8000-000000000004", roles: ["ORGANIZER"] },
     process.env.JWT_SECRET
   );
 
@@ -78,7 +78,7 @@ test("authorized event creators receive validation errors before persistence", a
 
 test("attendees cannot update events", async () => {
   const token = jwt.sign(
-    { sub: "user-id", roles: ["ATTENDEE"] },
+    { sub: "00000000-0000-4000-8000-000000000004", roles: ["ATTENDEE"] },
     process.env.JWT_SECRET
   );
 
@@ -96,7 +96,7 @@ test("attendees cannot update events", async () => {
 
 test("attendees cannot cancel events", async () => {
   const token = jwt.sign(
-    { sub: "user-id", roles: ["ATTENDEE"] },
+    { sub: "00000000-0000-4000-8000-000000000004", roles: ["ATTENDEE"] },
     process.env.JWT_SECRET
   );
 
@@ -144,7 +144,7 @@ test("attendee lists require authentication and organizer/admin authorization", 
   assert.equal(anonymous.status, 401);
 
   const token = jwt.sign(
-    { sub: "attendee-id", roles: ["ATTENDEE"] },
+    { sub: "00000000-0000-4000-8000-000000000001", roles: ["ATTENDEE"] },
     process.env.JWT_SECRET
   );
   const attendee = await fetch(`${baseUrl}/api/v1/events/${eventId}/attendees`, {
@@ -168,7 +168,7 @@ test("feedback endpoints require authentication", async () => {
 test("only attendees may submit feedback and event staff cannot retrieve it", async () => {
   const eventId = "9d3dba07-c272-4f71-aedd-3fc7f4c3c589";
   const organizerToken = jwt.sign(
-    { sub: "organizer-id", roles: ["ORGANIZER"] },
+    { sub: "00000000-0000-4000-8000-000000000002", roles: ["ORGANIZER"] },
     process.env.JWT_SECRET
   );
   const organizerSubmit = await fetch(`${baseUrl}/api/v1/events/${eventId}/feedback`, {
@@ -179,7 +179,7 @@ test("only attendees may submit feedback and event staff cannot retrieve it", as
   assert.equal(organizerSubmit.status, 403);
 
   const staffToken = jwt.sign(
-    { sub: "staff-id", roles: ["EVENT_STAFF"] },
+    { sub: "00000000-0000-4000-8000-000000000003", roles: ["EVENT_STAFF"] },
     process.env.JWT_SECRET
   );
   const staffRead = await fetch(`${baseUrl}/api/v1/events/${eventId}/feedback`, {
@@ -193,7 +193,7 @@ test("reporting endpoints require authentication and reject attendees", async ()
   assert.equal(anonymous.status, 401);
 
   const token = jwt.sign(
-    { sub: "attendee-id", roles: ["ATTENDEE"] },
+    { sub: "00000000-0000-4000-8000-000000000001", roles: ["ATTENDEE"] },
     process.env.JWT_SECRET
   );
   const attendee = await fetch(`${baseUrl}/api/v1/reports/events`, {
@@ -213,7 +213,7 @@ test("event registration requires authentication", async () => {
 
 test("event registration is restricted to attendees", async () => {
   const token = jwt.sign(
-    { sub: "organizer-id", roles: ["ORGANIZER"] },
+    { sub: "00000000-0000-4000-8000-000000000002", roles: ["ORGANIZER"] },
     process.env.JWT_SECRET
   );
 
@@ -231,7 +231,7 @@ test("event registration is restricted to attendees", async () => {
 
 test("event registration validates the event ID", async () => {
   const token = jwt.sign(
-    { sub: "attendee-id", roles: ["ATTENDEE"] },
+    { sub: "00000000-0000-4000-8000-000000000001", roles: ["ATTENDEE"] },
     process.env.JWT_SECRET
   );
 
@@ -250,7 +250,7 @@ test("event registration validates the event ID", async () => {
 
 test("event registration rejects malformed JSON with a client error", async () => {
   const token = jwt.sign(
-    { sub: "attendee-id", roles: ["ATTENDEE"] },
+    { sub: "00000000-0000-4000-8000-000000000001", roles: ["ATTENDEE"] },
     process.env.JWT_SECRET
   );
 
@@ -273,7 +273,7 @@ test("payment status requires authentication", async () => {
 });
 
 test("payment status is restricted to attendees", async () => {
-  const token = jwt.sign({ sub: "organizer-id", roles: ["ORGANIZER"] }, process.env.JWT_SECRET);
+  const token = jwt.sign({ sub: "00000000-0000-4000-8000-000000000002", roles: ["ORGANIZER"] }, process.env.JWT_SECRET);
   const response = await fetch(`${baseUrl}/api/v1/payments/registrations/9d3dba07-c272-4f71-aedd-3fc7f4c3c589`, {
     headers: { Authorization: `Bearer ${token}` }
   });
@@ -293,7 +293,7 @@ test("ticket retrieval requires authentication", async () => {
 });
 
 test("ticket check-in is limited to event staff and privileged event roles", async () => {
-  const token = jwt.sign({ sub: "attendee-id", roles: ["ATTENDEE"] }, process.env.JWT_SECRET);
+  const token = jwt.sign({ sub: "00000000-0000-4000-8000-000000000001", roles: ["ATTENDEE"] }, process.env.JWT_SECRET);
   const response = await fetch(`${baseUrl}/api/v1/tickets/check-in`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
@@ -308,7 +308,7 @@ test("ticket validation requires staff authorization and accepts authorized staf
   });
   assert.equal(unauthenticated.status, 401);
 
-  const attendeeToken = jwt.sign({ sub: "attendee-id", roles: ["ATTENDEE"] }, process.env.JWT_SECRET);
+  const attendeeToken = jwt.sign({ sub: "00000000-0000-4000-8000-000000000001", roles: ["ATTENDEE"] }, process.env.JWT_SECRET);
   const forbidden = await fetch(`${baseUrl}/api/v1/tickets/validate`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${attendeeToken}` },
@@ -316,7 +316,7 @@ test("ticket validation requires staff authorization and accepts authorized staf
   });
   assert.equal(forbidden.status, 403);
 
-  const staffToken = jwt.sign({ sub: "staff-id", roles: ["EVENT_STAFF"] }, process.env.JWT_SECRET);
+  const staffToken = jwt.sign({ sub: "00000000-0000-4000-8000-000000000003", roles: ["EVENT_STAFF"] }, process.env.JWT_SECRET);
   const allowed = await fetch(`${baseUrl}/api/v1/tickets/validate`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${staffToken}` },

@@ -18,7 +18,8 @@ const attendeeTwo = "5329c8ae-78b7-4bca-9fe5-cf63033778aa";
 const validBody = {
   phoneNumber: "9876543210",
   college: "PES University",
-  department: "CSE"
+  department: "CSE",
+  externalFormSubmitted: true
 };
 
 const defaultEvent = {
