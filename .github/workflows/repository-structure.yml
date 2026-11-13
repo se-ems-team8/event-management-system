@@ -1,0 +1,24 @@
+﻿name: Repository Structure Validation
+on:
+  push:
+    branches: [main, 'feature/**']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  structure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check project structure
+        run: |
+          test -d backend
+          test -d frontend
+          test -d database
+          test -d docs
+          test -d load-tests
+          test -s backend/package.json
+          test -s frontend/package.json
+          test -s database/schema.sql
