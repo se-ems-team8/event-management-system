@@ -3,6 +3,9 @@ name: Event Management System CI
 
 on:
   push:
+    branches:
+      - main
+      - 'feature/**'
   pull_request:
     branches:
       - main
@@ -16,6 +19,27 @@ jobs:
     name: Backend Tests
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: event_management_system_loadtest
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    env:
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: event_management_system_loadtest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -27,6 +51,9 @@ jobs:
 
       - name: Install backend dependencies
         run: npm install --prefix backend
+
+      - name: Prepare isolated database schema
+        run: node load-tests/prepare-isolated-database.js
 
       - name: Run backend tests
         run: node --test --test-force-exit
