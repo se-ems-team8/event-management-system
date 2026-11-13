@@ -1,0 +1,18 @@
+﻿name: Database SQL Validation
+on:
+  push:
+    branches: [main, 'feature/**']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  sql:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate SQL files
+        run: |
+          test -s database/schema.sql
+          find database -name "*.sql" -type f
