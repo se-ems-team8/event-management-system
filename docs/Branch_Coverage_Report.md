@@ -1,11 +1,15 @@
 # Event Management System — Branch Coverage Report
 
 - **Coverage tool:** c8 12.0.0
-- **Recorded run date:** 6 November 2026
+- **Recorded run date:** 15 November 2026
 
 ## EMS-TEST-04 Completion Summary
 
-EMS-TEST-04 has been completed. The code coverage and branch coverage reports have been generated. The HTML and JSON coverage artifacts are available in docs/coverage/. The backend automated test suite completed successfully with 158 passed and 0 failed. The frontend production build completed successfully. All five required testing documentation deliverables have been prepared.
+The backend automated test suite was executed successfully from the current project checkout.
+
+The latest execution completed with **231 passed and 0 failed tests**. Updated code coverage and branch coverage measurements were generated using c8.
+
+The test suite covers backend controllers, middleware, routes, services, validators and related functionality.
 
 **STATUS: COMPLETED**
 
@@ -13,30 +17,46 @@ EMS-TEST-04 has been completed. The code coverage and branch coverage reports ha
 
 | Metric | Coverage |
 |---|---:|
-| Branches | **76.00%** |
-| Statements | **66.45%** |
-| Lines | **66.45%** |
-| Functions | **73.17%** |
+| Branches | **82.64%** |
+| Statements | **85.51%** |
+| Lines | **85.51%** |
+| Functions | **90.24%** |
 
-The archived JSON summary confirms **361 of 475 branches covered**. Strong branch results were recorded in the report, ticket, feedback and registration controllers.
+### Test execution summary
+
+| Metric | Result |
+|---|---:|
+| Total tests | 231 |
+| Passed | 231 |
+| Failed | 0 |
+| Skipped | 0 |
+| Execution time | Approximately 46.6 seconds |
+
+### Component-wise branch coverage
 
 | Component | Branch coverage |
 |---|---:|
 | Report controller | 94.28% |
+| Admin controller | 91.34% |
 | Ticket controller | 85.96% |
 | Feedback controller | 84.21% |
+| Authentication controller | 83.92% |
 | Registration controller | 82.97% |
 | Event controller | 77.77% |
 | Authentication middleware | 74.19% |
 | Payment controller | 72.72% |
+| Notification service | 66.66% |
+| Audit controller | 66.66% |
 | Upload middleware | 50.00% |
-| Authentication controller | 48.00% |
+| Event validators | 74.19% |
 
-## Coverage deliverables
+## Coverage Deliverables
 
-- [HTML coverage report](coverage/backend/index.html)
-- [JSON coverage summary](coverage/backend/coverage-summary.json)
+- [HTML coverage report](coverage/index.html)
+- [JSON coverage summary](coverage/coverage-summary.json)
 
-The archived c8 worker files carry 7 November timestamps, while this report records 6 November; the JSON also references an original source clone. The figures are therefore identified as the saved historical snapshot, not as a fresh measurement of the current checkout. The backend test suite was separately rerun from the current checkout with **158 passed, 0 failed**; its log is available at [automated-tests.tap](testing/EMS-TEST-04/automated-tests.tap).
+The coverage measurements above represent the latest recorded execution from the current checkout on 16 November 2026.
 
-Branch coverage describes execution of conditional paths and is one measure of test thoroughness; it is considered alongside statement, line and function coverage and the broader test-case register.
+Branch coverage measures how many conditional execution paths were exercised during testing. It complements statement, line and function coverage in assessing test thoroughness.
+
+The current branch coverage is 82.64%, while line coverage is 85.51% and function coverage is 90.24%. These measurements identify areas where additional test cases may improve coverage further.

@@ -5,71 +5,89 @@
 
 ## EMS-TEST-04 Completion Summary
 
-EMS-TEST-04 has been completed. The code coverage and branch coverage reports have been generated. The HTML and JSON coverage artifacts are available in docs/coverage/. The backend automated test suite completed successfully with 158 passed and 0 failed. The frontend production build completed successfully. All five required testing documentation deliverables have been prepared.
+EMS-TEST-04 has been completed. The backend automated test suite was executed successfully against the current project checkout. The latest execution completed with **231 passed and 0 failed tests**.
+
+Updated HTML and JSON code coverage and branch coverage reports were also generated under `docs/coverage/`.
 
 **STATUS: COMPLETED**
 
 ## Executive summary
 
-The backend automated test suite completed successfully: **158 passed, 0 failed, 0 skipped**, with process exit code **0**. The run covered **18 test files**, comprising 145 top-level tests and 13 nested subtests. Runtime was 7.81 seconds.
+The backend automated test suite completed successfully: **231 passed, 0 failed, 0 skipped**, with no reported test failures. The test suite covered backend controllers, middleware, routes, services, validators, database transaction handling, security-related behavior and supporting test utilities.
 
-The frontend production build also completed successfully with Vite 6.4.4: **23 modules transformed**, assets emitted, exit code **0**. This is a build verification, separate from browser-based system acceptance.
+The execution duration was approximately **32.93 seconds**.
+
+The latest c8 coverage measurements were:
+
+- Statement coverage: **85.51%**
+- Line coverage: **85.51%**
+- Function coverage: **90.24%**
+- Branch coverage: **82.64%**
 
 ## Backend test results
 
 | Result | Count |
 |---|---:|
-| Test files executed | 18 |
-| Top-level tests | 145 |
-| Nested subtests | 13 |
-| Total runner results | 158 |
-| Passed | **158** |
-| Failed / cancelled / skipped / todo | **0 / 0 / 0 / 0** |
-| Process exit code | **0** |
-| Duration | 7,813.56 ms |
+| Total tests | 231 |
+| Passed | **231** |
+| Failed | **0** |
+| Cancelled | **0** |
+| Skipped | **0** |
+| Todo | **0** |
+| Execution duration | Approximately 32,930 ms |
 
 ### Results by module
 
-| Test module | Results | Pass | Fail |
-|---|---:|---:|---:|
-| attendeeList | 7 | 7 | 0 |
-| auditLogging | 8 | 8 | 0 |
-| eventDetails | 5 | 5 | 0 |
-| eventRoutes | 22 | 22 | 0 |
-| eventSearch | 8 | 8 | 0 |
-| eventValidators | 5 | 5 | 0 |
-| feedback | 12 | 12 | 0 |
-| isolatedDatabaseSetup | 7 | 7 | 0 |
-| loadTestDataSetup | 5 | 5 | 0 |
-| loadTestScript | 6 | 6 | 0 |
-| nonFunctionalSecurity | 6 | 6 | 0 |
-| notifications | 7 | 7 | 0 |
-| passwordComparisonPool | 1 | 1 | 0 |
-| paymentStatus | 6 | 6 | 0 |
-| performanceReport | 11 | 11 | 0 |
-| registration | 18 | 18 | 0 |
-| reports | 10 | 10 | 0 |
-| tickets | 14 | 14 | 0 |
-| **Total** | **158** | **158** | **0** |
+| Test module / area | Results |
+|---|---|
+| Admin controller | 37 |
+| Attendee list and audit logging | 8 |
+| Authentication controller | 17 |
+| Event details and event routes | 20 |
+| Event search and validation | 13 |
+| Feedback | 12 |
+| Isolated database and load-test tooling | 18 |
+| Non-functional security | 6 |
+| Notifications | 19 |
+| Password comparison pool | 1 |
+| Payment status | 6 |
+| Performance reporting | 11 |
+| Registration | 18 |
+| Reports | 10 |
+| Tickets | 14 |
+| **Total** | **231** |
 
-The suite exercises authentication and route authorization, event validation and search, registration workflows, payment status, tickets and check-in, feedback, notifications, reporting, audit behavior, and test-tooling helpers. Several tests use mocks, source assertions, or local HTTP servers; their results verify the assertions in those tests, not live database persistence or full user journeys.
+*Note: The area-wise figures above are a grouping of test results by functional area, not a separately recorded Node.js test-file breakdown.*
+
+The suite exercises authentication and authorization, event management, administration, registration, payment status, ticket generation and check-in, feedback, notifications, audit logging, reporting, validation, transaction handling and test-tooling functionality.
+
+Several tests use mocks, source assertions or local HTTP servers. Their results verify the assertions in those tests and should not be interpreted as proof of every live database workflow or complete browser-based user journey.
 
 ## Execution method and evidence
 
-The existing tests were run without modifying test or application code. Files were selected explicitly and run sequentially:
+The backend automated test suite was executed with Node.js test runner and c8 coverage instrumentation.
+
+**Recorded coverage command:**
 
 ```powershell
-$testFiles = Get-ChildItem ./test/*.test.js | Sort-Object Name | ForEach-Object FullName
-& node --test --test-force-exit --test-concurrency=1 --test-reporter=tap --test-timeout=60000 $testFiles
+npx c8 --include "backend/src/**/*.js" --reporter=text --reporter=html --reporter=json-summary --reports-dir=docs/coverage node --test --test-force-exit --test-concurrency=1
 ```
 
-- [Backend TAP output](testing/EMS-TEST-04/automated-tests.tap)
-- [Backend process exit code](testing/EMS-TEST-04/automated-exit-code.txt)
-- [Frontend build output](testing/EMS-TEST-04/frontend-build.txt)
-- [Frontend build exit code](testing/EMS-TEST-04/frontend-build-exit-code.txt)
+- HTML coverage report: `docs/coverage/index.html`
+- JSON coverage summary: `docs/coverage/coverage-summary.json`
 
-The coverage snapshot is documented separately in the [Code Coverage Report](Code_Coverage_Report.md) and [Branch Coverage Report](Branch_Coverage_Report.md). It is historical and was not regenerated during this test rerun.
+The terminal output recorded:
+
+- 231 tests
+- 231 passed
+- 0 failed
+- 0 skipped
+- Exit code 0
 
 ## Verification scope
 
-The passing suite provides successful automated evidence for the tested module, route, validation, and tooling behaviors. It does not substitute for database-backed end-to-end workflows, browser acceptance, live load testing, deployment TLS checks, or long-term availability measurements. Those system-level cases retain their individual statuses in the [Test Case Document](Test_Case_Document.md).
+The passing automated suite provides evidence for the tested backend module, route, validation, security and tooling behaviors.
+
+It does not replace database-backed end-to-end workflows, browser acceptance testing, live load testing, deployment TLS verification or long-term availability measurements. Those system-level cases should retain their individual execution statuses in the Test Case Document.
+
+The latest code and branch coverage measurements are documented separately in the Code Coverage Report and Branch Coverage Report.
