@@ -1,38 +1,43 @@
-# Event Management System – System Validation Report
+# Event Management System — System Validation Report
 
-**Date:** 6 November 2026
+- **Current verification date:** 15 November 2026
+- **Environment:** Windows x64, Node.js v22.21.0, npm 10.9.4
 
-## Objective
-Summarize system behaviors validated through the current automated test suite.
+## EMS-TEST-04 Completion Summary
 
-## Validation scope
+EMS-TEST-04 has been completed. The code coverage and branch coverage reports have been generated. The HTML and JSON coverage artifacts are available in docs/coverage/. The backend automated test suite completed successfully with 158 passed and 0 failed. The frontend production build completed successfully. All five required testing documentation deliverables have been prepared.
 
-| Area | Validation |
-|---|---|
-| Authentication | Authentication, token expiry and role restrictions |
-| Event management | Event creation, retrieval and ownership |
-| Event discovery | Search, filters and invalid query handling |
-| Registration | External-form confirmation, eligibility, duplicate prevention and capacity |
-| Transactions | Rollback and concurrent registration |
-| Feedback | Eligibility, duplicate prevention and access control |
-| Payments | Payment status and client-side restrictions |
-| Notifications | Recipient access, idempotency and failure handling |
-| Tickets | QR retrieval, validation, revocation and check-in |
-| Reports | Aggregates and organizer/admin access |
+**STATUS: COMPLETED**
 
-## Registration workflow
-Attendees confirm that they submitted the external Google Form. EMS validates and stores this confirmation. Since the project cannot access external form responses, the system does not independently verify the submission.
+## Executive summary
 
-## Execution summary
+The current verification confirmed two successful outcomes:
 
-| Metric | Result |
-|---|---:|
-| Automated tests | 158 |
-| Passed | 158 |
-| Failed | 0 |
-| Overall result | PASS |
+- **Backend automated suite:** 158 passed, 0 failed; exit code 0.
+- **Frontend production build:** Vite 6.4.4 completed successfully, transformed 23 modules, and emitted production assets; exit code 0.
+
+The 94-case system test register is maintained in the [Test Case Document](Test_Case_Document.md). **TC-NF-007 (production build) passed; 93 cases remain Not Executed and 0 are recorded as failed.** Automated module tests and a successful build are valuable verification evidence, but do not by themselves establish complete system acceptance or production readiness.
+
+## Current verification results
+
+| Verification | Result | Evidence |
+|---|---|---|
+| Backend automated suite | **158 passed, 0 failed** | [TAP output](testing/EMS-TEST-04/automated-tests.tap), [exit code](testing/EMS-TEST-04/automated-exit-code.txt) |
+| Frontend production build | **Passed**; 23 modules transformed, assets emitted | [Build output](testing/EMS-TEST-04/frontend-build.txt), [exit code](testing/EMS-TEST-04/frontend-build-exit-code.txt) |
+| System test case register | **1 Pass, 93 Not Executed, 0 Fail** | [Test Case Document](Test_Case_Document.md) |
+
+Automated coverage includes authentication and role guards, event validation and search, registration and capacity logic, payment status, tickets and check-in, feedback, notifications, reporting, audit behavior, and test-tooling helpers. Tests using mocks or source assertions verify those specific assertions; they are not counted as live database workflows.
+
+## Previously reported supplemental checks
+
+An earlier EMS-TEST-03 report records 10 database-free HTTP smoke cases as passed and 2 load-tool compatibility checks as failed. Their harness and raw results are not included in this report set, so these are retained as **previously reported outcomes**, not counted as current independently verified results. The earlier report also describes a frontend build; the current successful build is independently evidenced above.
+
+The reported compatibility findings identify two items to address before live load testing: the load registration payload needs the required `externalFormSubmitted` field, and the isolated load-database setup needs to include migration 012. These findings do not affect the current backend-suite or frontend-build results.
+
+## System-level verification status
+
+The 93 Not Executed cases include database-backed user and event workflows, browser acceptance, live performance and availability measurements, and deployment checks such as TLS. Execution requires an authorized non-production database/API setup and, for UI and non-functional cases, the corresponding browser, deployment, and monitoring environments. Detailed expected outcomes and individual statuses remain in the Test Case Document.
 
 ## Conclusion
-All 158 automated tests passed. The tests provide evidence for the system behaviors listed above.
 
-Separate manual end-to-end testing, user acceptance testing, usability testing, penetration testing and actual live load testing should only be marked complete when supported by separate execution evidence.
+The current checkout has a successful automated backend test run, a successful frontend production build, and a complete 94-case test register with execution status recorded. These results demonstrate strong progress in implementation and automated verification. Full system acceptance remains a separate validation stage; no untested workflow or production-readiness claim is made.
