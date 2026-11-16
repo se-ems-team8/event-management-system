@@ -16,7 +16,7 @@ permissions:
 
 jobs:
 
-  # JOB 1: BACKEND TESTS
+  # JOB 1: BACKEND TESTS AND COVERAGE
   backend-tests:
     name: Backend Tests
     runs-on: ubuntu-latest
@@ -51,22 +51,36 @@ jobs:
         with:
           node-version: 22
 
+      - name: Install coverage tooling
+        run: npm ci
+
       - name: Install backend dependencies
         run: npm install --prefix backend
 
       - name: Prepare isolated database schema
         run: node load-tests/prepare-isolated-database.js
 
-      - name: Run backend tests
+      - name: Run backend tests with coverage
         shell: bash
         run: |
           set +e
-          node --test --test-force-exit --test-reporter=tap > backend-test.tap 2>&1
-          TEST_STATUS=$?
-          cat backend-test.tap
-          exit $TEST_STATUS
 
-      - name: Publish backend test summary
+          npx c8 \
+            --include "backend/src/**/*.js" \
+            --reporter=text \
+            --reporter=json-summary \
+            --reporter=lcov \
+            --reports-dir=coverage/backend \
+            node --test --test-force-exit --test-reporter=tap \
+            > backend-test.tap 2>&1
+
+          TEST_STATUS=$?
+
+          cat backend-test.tap
+
+          exit "$TEST_STATUS"
+
+      - name: Publish backend test and coverage summary
         if: always()
         shell: bash
         run: |
@@ -83,12 +97,39 @@ jobs:
             echo "| Test results | Report unavailable |" >> "$GITHUB_STEP_SUMMARY"
           fi
 
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "## Backend Code Coverage" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Coverage Metric | Percentage |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|---|---:|" >> "$GITHUB_STEP_SUMMARY"
+
+          if [ -f coverage/backend/coverage-summary.json ]; then
+            LINE=$(node -p "require('./coverage/backend/coverage-summary.json').total.lines.pct")
+            BRANCH=$(node -p "require('./coverage/backend/coverage-summary.json').total.branches.pct")
+            STATEMENTS=$(node -p "require('./coverage/backend/coverage-summary.json').total.statements.pct")
+            FUNCTIONS=$(node -p "require('./coverage/backend/coverage-summary.json').total.functions.pct")
+
+            echo "| Line Coverage | ${LINE}% |" >> "$GITHUB_STEP_SUMMARY"
+            echo "| Branch Coverage | ${BRANCH}% |" >> "$GITHUB_STEP_SUMMARY"
+            echo "| Statement Coverage | ${STATEMENTS}% |" >> "$GITHUB_STEP_SUMMARY"
+            echo "| Function Coverage | ${FUNCTIONS}% |" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "| Coverage | Report unavailable |" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
       - name: Upload backend test report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: backend-test-report
           path: backend-test.tap
+          if-no-files-found: warn
+
+      - name: Upload backend coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-coverage-report
+          path: coverage/backend/
           if-no-files-found: warn
 
   # JOB 2: FRONTEND VALIDATION
@@ -148,6 +189,13 @@ jobs:
           name: backend-test-report
           path: reports/backend
 
+      - name: Download backend coverage report
+        if: always()
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-coverage-report
+          path: reports/backend-coverage
+
       - name: Download frontend build report
         if: always()
         uses: actions/download-artifact@v4
@@ -170,7 +218,22 @@ jobs:
           echo "| Collect Test Reports | Completed |" >> "$GITHUB_STEP_SUMMARY"
 
           echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "Detailed logs are available in the workflow artifacts." >> "$GITHUB_STEP_SUMMARY"
+          echo "## Backend Coverage Results" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Metric | Percentage |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|---|---:|" >> "$GITHUB_STEP_SUMMARY"
+
+          if [ -f reports/backend-coverage/coverage-summary.json ]; then
+            LINE=$(node -p "require('./reports/backend-coverage/coverage-summary.json').total.lines.pct")
+            BRANCH=$(node -p "require('./reports/backend-coverage/coverage-summary.json').total.branches.pct")
+
+            echo "| Line Coverage | ${LINE}% |" >> "$GITHUB_STEP_SUMMARY"
+            echo "| Branch Coverage | ${BRANCH}% |" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "| Coverage | Report unavailable |" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Detailed reports are available in workflow artifacts." >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload combined CI reports
         if: always()
